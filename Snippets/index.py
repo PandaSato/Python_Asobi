@@ -5,8 +5,8 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import sys
 
-#자동완성을 위해서 만들어놓은 오브젝트 리스트들..
-#실제로 쓸 필요는 없음.
+# 자동완성을 위해서 만들어놓은 오브젝트 리스트들..
+# 실제로 쓸 필요는 없음.
 QtObjList = [QWidget, 
              QVBoxLayout, QGridLayout,
              QLineEdit,QPushButton,QTextEdit,QTextBrowser]
