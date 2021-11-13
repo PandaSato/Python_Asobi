@@ -10,6 +10,8 @@ import sys
 QtObjList = [QWidget, 
              QVBoxLayout, QGridLayout,
              QLineEdit,QPushButton,QTextEdit,QTextBrowser]
+#test
+
 
 
 class Display(QWidget):
@@ -24,7 +26,7 @@ class Display(QWidget):
         self.layout.addWidget(self.example)
         self.layout.addWidget(self.button)
         self.setLayout(self.layout)
-        
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     display = Display()

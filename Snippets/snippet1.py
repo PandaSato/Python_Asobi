@@ -1,6 +1,3 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-# QTableWidget Example @pythonspot.com
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import sys,time,os,random
