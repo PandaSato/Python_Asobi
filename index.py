@@ -14,11 +14,13 @@ QtObjList = [QWidget,
 
 
 
-class Display(QWidget):
+class Genesis(QWidget):
     def __init__(self):
-        super(Display,self).__init__()
+        super(Genesis,self).__init__()
         
         ## Make UI
+        self.initUI()
+        '''
         self.resize(400,400)
         self.layout = QVBoxLayout()
         self.example = QLineEdit("Hello World")
@@ -26,22 +28,45 @@ class Display(QWidget):
         self.layout.addWidget(self.example)
         self.layout.addWidget(self.button)
         self.setLayout(self.layout)
+        '''
+        
+        ###Paint Setting
+        self.painter = QPainter()
+        self.color = 0x000000
+        self.font = ['Arial',20]
     def paintEvent(self, event):
-        qp = QPainter()
-        qp.begin(self)
-        qp.setPen(QColor(Qt.red))
-        qp.setFont(QFont('Arial', 20))
-        qp.drawText(10,50, QString(unicode('直接に聞いてください。', 'utf-8')))
-        qp.setPen(QColor(Qt.blue))
-        qp.drawLine(10,100,100,100)
-        qp.drawRect(10,150,150,100)
-        qp.setPen(QColor(Qt.yellow))
-        qp.drawEllipse(100,50,100,50)
-        qp.drawPixmap(220,10,QPixmap("python.jpg"))
-        qp.fillRect(200,175,150,100,QBrush(Qt.SolidPattern))
-        qp.end()
+
+        self.painter.begin(self)
+        self.drawEvent(event)
+        '''
+        self.painter.setPen(QColor(Qt.red))
+        self.painter.setFont(QFont('Arial', 20))
+        self.painter.drawText(10,50, QString(unicode('直接に聞いてください。', 'utf-8')))
+        '''        
+        self.update()        
+        self.painter.end()
+    
+    ## Will Be Overloaded
+    def initUI(self):
+        return
+    def drawEvent(self, event):
+        return
+    
+    ## Painting Functions 
+    def drawString(self,x,y,s):
+        self.painter.setPen(QColor(self.color))
+        self.painter.setFont(QFont(self.font[0],self.font[1]))
+        self.painter.drawText(x,y, QString(unicode(s, 'utf-8')))
+
+class MainWindow(Genesis):
+    def __init__(self):
+        super(MainWindow,self).__init__()
+    def initUI(self):
+        self.resize(400,400)
+    def drawEvent(self, event):
+        self.drawString(10, 50, '直接に聞いてください。')
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    display = Display()
-    display.show()
+    mwindow = MainWindow()
+    mwindow.show()
     app.exec_()
