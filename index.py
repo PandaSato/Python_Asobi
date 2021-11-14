@@ -26,7 +26,20 @@ class Display(QWidget):
         self.layout.addWidget(self.example)
         self.layout.addWidget(self.button)
         self.setLayout(self.layout)
-
+    def paintEvent(self, event):
+        qp = QPainter()
+        qp.begin(self)
+        qp.setPen(QColor(Qt.red))
+        qp.setFont(QFont('Arial', 20))
+        qp.drawText(10,50, "hello Python")
+        qp.setPen(QColor(Qt.blue))
+        qp.drawLine(10,100,100,100)
+        qp.drawRect(10,150,150,100)
+        qp.setPen(QColor(Qt.yellow))
+        qp.drawEllipse(100,50,100,50)
+        qp.drawPixmap(220,10,QPixmap("python.jpg"))
+        qp.fillRect(200,175,150,100,QBrush(Qt.SolidPattern))
+        qp.end()
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     display = Display()
