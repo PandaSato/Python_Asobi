@@ -31,7 +31,7 @@ class Display(QWidget):
         qp.begin(self)
         qp.setPen(QColor(Qt.red))
         qp.setFont(QFont('Arial', 20))
-        qp.drawText(10,50, "hello Python")
+        qp.drawText(10,50, QString(unicode('直接に聞いてください。', 'utf-8')))
         qp.setPen(QColor(Qt.blue))
         qp.drawLine(10,100,100,100)
         qp.drawRect(10,150,150,100)
