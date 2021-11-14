@@ -20,16 +20,7 @@ class Genesis(QWidget):
         
         ## Make UI
         self.initUI()
-        '''
-        self.resize(400,400)
-        self.layout = QVBoxLayout()
-        self.example = QLineEdit("Hello World")
-        self.button = QPushButton("Hello World!")
-        self.layout.addWidget(self.example)
-        self.layout.addWidget(self.button)
-        self.setLayout(self.layout)
-        '''
-        
+
         ###Paint Setting
         self.painter = QPainter()
         self.color = 0x000000
@@ -37,12 +28,7 @@ class Genesis(QWidget):
     def paintEvent(self, event):
 
         self.painter.begin(self)
-        self.drawEvent(event)
-        '''
-        self.painter.setPen(QColor(Qt.red))
-        self.painter.setFont(QFont('Arial', 20))
-        self.painter.drawText(10,50, QString(unicode('直接に聞いてください。', 'utf-8')))
-        '''        
+        self.drawEvent(event) 
         self.update()        
         self.painter.end()
     
@@ -57,7 +43,6 @@ class Genesis(QWidget):
         self.painter.setPen(QColor(self.color))
         self.painter.setFont(QFont(self.font[0],self.font[1]))
         self.painter.drawText(x,y, QString(unicode(s, 'utf-8')))
-
 class MainWindow(Genesis):
     def __init__(self):
         super(MainWindow,self).__init__()
