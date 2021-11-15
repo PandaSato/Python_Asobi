@@ -43,6 +43,7 @@ def getObject():
         for obj in Objs:
             if obj.upper().count(s.upper())>0:
                 result.append(obj)
+        print("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE") ##border line
         for obj in result: print(obj)
         s = raw_input("please input(-1=back, 1=select): ")
         if s=='-1':
