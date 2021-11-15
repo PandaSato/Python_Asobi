@@ -4,9 +4,9 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 from PyQt4 import QtGui,QtCore
-import sys,os,time,random
+import sys,os,time,random,glob,pickle,numpy
 
-libs={"QtGui":QtGui,"QtCore":QtCore}
+libs={"QtGui":QtGui,"QtCore":QtCore,"os":os,"time":time,"random":random,"glob":glob,"pickle":pickle,"numpy":numpy}
 
 global SelectedLibrary
         
@@ -17,14 +17,21 @@ class MainWindow(QWidget):
         SelectedLibrary=QtGui
         self.initUI()
     def selectLibrary(self):
-        try: 
+        try:
             t = self.list1.list.currentItem()
             global SelectedLibrary
-            SelectedLibrary=t.text()
+            SelectedLibrary=libs[str(t.text())]
             self.list2.WholeList=dir(SelectedLibrary)
+            self.list2.search.setText("")
+            self.list3.search.setText("")
             self.list2.listUpdate()
         except:
             pass
+    def selectObject(self):
+        t = self.list2.list.currentItem()
+        global SelectedLibrary
+        self.list3.WholeList=dir(getattr(SelectedLibrary,str(t.text())))
+        self.list3.listUpdate()
     def initUI(self):
         self.resize(800,400)
         self.layout = QHBoxLayout()
@@ -36,6 +43,7 @@ class MainWindow(QWidget):
         self.list1.listUpdate()
         self.list1.list.currentItemChanged.connect(self.selectLibrary)
         self.list2=SearchList("Classes")
+        self.list2.list.currentItemChanged.connect(self.selectObject)        
         self.list3=SearchList("Components")
         
         self.layout.addWidget(self.list1)
@@ -50,7 +58,7 @@ class SearchList(QWidget):
         self.list.clear()
         try:
             for k in self.WholeList:
-                if k.count(self.search.text())>0:
+                if k.upper().count(str(self.search.text()).upper())>0:
                     self.list.addItem(QListWidgetItem(k))
         except:
             pass
