@@ -4,8 +4,6 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 from PyQt4 import QtGui,QtCore
-
-#You can import any library in libs.
 import sys,os,time,random,glob,pickle,numpy
 
 libs={"QtGui":QtGui,"QtCore":QtCore,"os":os,"time":time,"random":random,"glob":glob,"pickle":pickle,"numpy":numpy}
