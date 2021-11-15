@@ -3,82 +3,71 @@
 # QTableWidget Example @pythonspot.com
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
-import sys
+from PyQt4 import QtGui,QtCore
+import sys,os,time,random
 
-# 자동완성을 위해서 만들어놓은 오브젝트 리스트들..
-# 실제로 쓸 필요는 없음.
-QtObjList = [QWidget, 
-             QVBoxLayout, QGridLayout,
-             QLineEdit,QPushButton,QTextEdit,QTextBrowser]
-#test
+libs={"QtGui":QtGui,"QtCore":QtCore}
 
-
-#Genesis class is Base class of window. You can define your own windows as its base as Genesis.
-#It has useful functions, and cleaned up messy things.
-
-class Genesis(QWidget):
-    def __init__(self):
-        super(Genesis,self).__init__()
+global SelectedLibrary
         
-        ## Make UI
-        self.initUI()
-
-        ###Paint Setting
-        self.painter = QPainter()
-        self.color = 0xFFFFFF
-        self.font = ['MS Gothic',20]
-    def paintEvent(self, event):
-
-        self.painter.begin(self)
-        self.drawEvent(event) 
-        self.update()        
-        self.painter.end()
-    
-    ## Will Be Overloaded
-    def initUI(self):
-        return
-    def drawEvent(self, event):
-        return
-    
-    ## Painting Functions 
-    def drawBunsho(self,x,y,s):
-        self.painter.setPen(QColor(self.color))
-        self.painter.setFont(QFont(self.font[0],self.font[1]))
-        self.painter.drawText(x,y, QString(unicode(s, 'utf-8')))
-    def drawYomigana(self,x,y,s):
-        self.painter.setPen(QColor(self.color))
-        self.painter.setFont(QFont(self.font[0],self.font[1]))
-        self.painter.drawText(x,y, QString(unicode(s, 'utf-8')))        
-    def drawSquare(self, x, y, size):
-        
-        color = QColor(self.color)
-        self.painter.fillRect(x + 1, y + 1, size - 2, size - 2, color)
-
-        self.painter.setPen(color.light())
-        self.painter.drawLine(x, y + size - 1, x, y)
-        self.painter.drawLine(x, y, x + size - 1, y)
-
-        self.painter.setPen(color.dark())
-        self.painter.drawLine(x + 1, y + size - 1, x + size - 1, y + size - 1)
-        self.painter.drawLine(x + size - 1, y + size - 1, x + size - 1, y + 1)
-class MainWindow(Genesis):
+class MainWindow(QWidget):
     def __init__(self):
         super(MainWindow,self).__init__()
-        self.setStyleSheet("""
-        QWidget {
-            background-color: rgb(0,0,0);
-            color: rgb(255,255,255)
-            }
-        """)
+        global SelectedLibrary
+        SelectedLibrary=QtGui
+        self.initUI()
+    def selectLibrary(self):
+        try: 
+            t = self.list1.list.currentItem()
+            global SelectedLibrary
+            SelectedLibrary=t.text()
+            self.list2.WholeList=dir(SelectedLibrary)
+            self.list2.listUpdate()
+        except:
+            pass
     def initUI(self):
-        self.resize(400,400)
-    def drawEvent(self, event):
-        self.color = 0xFFFFFF
-        self.drawBunsho(10, 50, '直接（ちょくせつ）に聞（き）いてください。')
-        self.color = 0xAA00AA
-        for dx in range(0,5):
-            for dy in range(0,5):
-                self.drawSquare(5+dx*10,60+dy*10,10)
+        self.resize(800,400)
+        self.layout = QHBoxLayout()
+        self.list1=SearchList("Libraries")
+        l = list(libs.keys())
+        l.sort()
+        for lib in l:
+            self.list1.WholeList.append(lib)
+        self.list1.listUpdate()
+        self.list1.list.currentItemChanged.connect(self.selectLibrary)
+        self.list2=SearchList("Classes")
+        self.list3=SearchList("Components")
+        
+        self.layout.addWidget(self.list1)
+        self.layout.addWidget(self.list2)
+        self.layout.addWidget(self.list3)
+
+        self.setLayout(self.layout)
+        
+            
+class SearchList(QWidget):
+    def listUpdate(self):
+        self.list.clear()
+        try:
+            for k in self.WholeList:
+                if k.count(self.search.text())>0:
+                    self.list.addItem(QListWidgetItem(k))
+        except:
+            pass
+                
+    def __init__(self,name):
+        super(SearchList,self).__init__()
+        self.label = QLabel(name)
+        self.search = QLineEdit()
+        self.search.textChanged.connect(self.listUpdate)
+        self.list = QListWidget()
+        self.layout = QVBoxLayout()
+        self.WholeList=[]
+        self.layout.addWidget(self.label)
+        self.layout.addWidget(self.search)
+        self.layout.addWidget(self.list)
+        self.setLayout(self.layout)
+        self.listUpdate()
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     mwindow = MainWindow()
