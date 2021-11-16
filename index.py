@@ -3,119 +3,202 @@
 # QTableWidget Example @pythonspot.com
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
-from PyQt4 import QtGui,QtCore
+import sys, random
 
-#You can import any library to libs
-import sys,os,glob
+#Genesis class is Base class of window. You can define your own windows as its base as Genesis.
+#It has useful functions, and cleaned up messy things.
 
-mem = '.mem'+str(231312384129435)
-
-def dumpGit(command):
-    os.system("git "+command + " > "+mem)
-    f = open(mem)
-    l = f.readlines()
-    f.close()
-    os.system("rm "+mem)
-    return l
-    
-global commits
+class Genesis(QWidget):
+    def __init__(self):
+        super(Genesis,self).__init__()
         
-class MainWindow(QWidget):
+        ## Make UI
+        self.initUI()
+
+        ###Paint Setting
+        self.painter = QPainter()
+        self.color = 0xFFFFFF
+        self.font = ['MS Gothic',20]
+    def paintEvent(self, event):
+
+        self.painter.begin(self)
+        self.drawEvent(event) 
+        self.update()        
+        self.painter.end()
+    
+    ## Will Be Overloaded
+    def initUI(self):
+        return
+    def drawEvent(self, event):
+        return
+    
+    ## Painting Functions 
+    def drawBunsho(self,x,y,s):
+        self.painter.setPen(QColor(self.color))
+        self.painter.setFont(QFont(self.font[0],self.font[1]))
+        self.painter.drawText(x,y, QString(unicode(s, 'utf-8')))
+    def drawYomigana(self,x,y,s):
+        self.painter.setPen(QColor(self.color))
+        self.painter.setFont(QFont(self.font[0],self.font[1]))
+        self.painter.drawText(x,y, QString(unicode(s, 'utf-8')))        
+    def drawSquare(self, x, y, size):
+        
+        color = QColor(self.color)
+        self.painter.fillRect(x + 1, y + 1, size - 2, size - 2, color)
+
+        self.painter.setPen(color.light())
+        self.painter.drawLine(x, y + size - 1, x, y)
+        self.painter.drawLine(x, y, x + size - 1, y)
+
+        self.painter.setPen(color.dark())
+        self.painter.drawLine(x + 1, y + size - 1, x + size - 1, y + size - 1)
+        self.painter.drawLine(x + size - 1, y + size - 1, x + size - 1, y + 1)
+    def drawPushedSquare(self, x, y, size):
+        
+        color = QColor(self.color)
+        self.painter.fillRect(x + 1, y + 1, size - 2, size - 2, color)
+
+        self.painter.setPen(color.dark())
+        self.painter.drawLine(x, y + size - 1, x, y)
+        self.painter.drawLine(x, y, x + size - 1, y)
+
+        self.painter.setPen(color.light())
+        self.painter.drawLine(x + 1, y + size - 1, x + size - 1, y + size - 1)
+        self.painter.drawLine(x + size - 1, y + size - 1, x + size - 1, y + 1)
+############################Main Application#################
+global W,H,M
+TileSize = 15
+dd = [[1,1],[1,-1],[-1,1],[-1,-1],[0,1],[1,0],[0,-1],[-1,0]]
+        
+class Mine():
+    def __init__(self):
+        self.bit = 0 # Using 4 bit to state mine
+        #2^0 bit : Mine(1) NotMine(0)
+        #2^1 bit : isShown(1) not Shown(0)
+        #2^2 bit : isFlagged(1) not Flagged(0)
+        #2^3 bit : isDoubt(1) not Doubt(0)
+    def isMine(self):
+        if self.bit & 1==1: return True
+        return False
+    def isShown(self):
+        if (self.bit>>1)&1==1: return True
+        return False
+    def isFlagged(self):
+        if (self.bit>>2)&1==1: return True
+        return False
+    def isDoubt(self):
+        if (self.bit>>3)&1==1: return True
+        return False
+    def changeFlag(self):
+        if self.bit&8==8: self.bit = self.bit^8
+        self.bit=self.bit^4
+    def changeDoubt(self):
+        if self.bit&4==4: self.bit = self.bit^4
+        self.bit=self.bit^8
+        
+class MineBoard():
+    def __init__(self):
+        global W,H,M
+        self.mines = []
+        for i in range(W*H):
+            self.mines.append(Mine())
+        cnt = M
+        while cnt>0:
+            r = random.randint(0,W*H-1)
+            if self.mines[r].isMine():
+                continue
+            else:
+                self.mines[r].bit=1 ## Make Mine
+                cnt-=1
+    def getMine(self,x,y):
+            return self.mines[x+W*y]
+    
+    
+
+class MainWindow(Genesis):
     def __init__(self):
         super(MainWindow,self).__init__()
-        self.initUI()
-        
-    def getChangedFiles(self):
-        try:
-            global commits
-            selectedCommits = self.commitList.list.selectedItems()
-            if len(selectedCommits)==1:
-                self.fileList.WholeList=[]
-                from_commit = commits[str(selectedCommits[0].text())]
-                to_commit =commits[str(self.commitList.list.currentItem().text())]
-                result = dumpGit('diff --name-only '+from_commit+' '+to_commit)
-                for f in result:
-                    if f.rstrip()[-3:]=='.py':
-                        self.fileList.WholeList.append(f.rstrip())
-                self.fileList.listUpdate()
-            if len(selectedCommits)>=2:
-                self.commitList.list.clearSelection()
-        except:            
-            pass
-            
-    def getHistory(self):
-        try:
-            selectedCommits = self.commitList.list.selectedItems()
-            from_commit = commits[str(selectedCommits[0].text())]
-            to_commit =commits[str(selectedCommits[1].text())]
-            result = dumpGit('diff '+from_commit+' '+to_commit+' '+str(self.fileList.list.currentItem().text()))
-            self.HistoryViewer.setPlainText("")
-            for line in result:
-                if line[0]=='+': self.HistoryViewer.setTextBackgroundColor(QColor(0x00FF00))
-                if line[0]=='-': self.HistoryViewer.setTextBackgroundColor(QColor(0xFF0000))
-                self.HistoryViewer.insertPlainText(line)
-        except:
-            pass
-            
-
+        self.setStyleSheet("""
+        QWidget {
+            background-color: rgb(0,0,0);
+            color: rgb(255,255,255)
+            }
+        """)
+        self.board = MineBoard()
+        self.X=0
+        self.Y=0
+        self.isGameOver=False
     def initUI(self):
-        self.resize(800,600)
-        self.layout = QVBoxLayout()
-        
-        # Make Commits list
-        self.commitList=SearchList("Commits")
-        self.commitList.list.setSelectionMode(QListWidget.MultiSelection)
-        self.commitList.list.currentItemChanged.connect(self.getChangedFiles)
-        commit_numbers = dumpGit('log | grep commit')
-        commit_dates = dumpGit('log | grep Date')
-        commit_comments = dumpGit('log --oneline')
-        global commits
-        commits = {}
-        for i in range(len(commit_dates)):
-            d=commit_dates[i].rstrip().replace("Date:   ","").split("+")[0] + "("+commit_comments[i][8:].rstrip()+")"
-            commits[d]=commit_numbers[i][7:].rstrip()
-            self.commitList.WholeList.append(d)
-        self.commitList.listUpdate()
-        self.fileList=SearchList("Files")
-        self.fileList.list.currentItemChanged.connect(self.getHistory)
-        self.layout.addWidget(self.commitList)
-        self.layout.addWidget(self.fileList)
-        
-        self.mainLayout = QHBoxLayout()
-        self.HistoryViewer = QTextBrowser()
-        self.mainLayout.addLayout(self.layout)
-        self.mainLayout.addWidget(self.HistoryViewer)
-        self.mainLayout.setStretchFactor(self.layout,1)
-        self.mainLayout.setStretchFactor(self.HistoryViewer,2)
-        self.setLayout(self.mainLayout)
-        
-            
-class SearchList(QWidget):
-    def listUpdate(self):
-        self.list.clear()
-        try:
-            for k in self.WholeList:
-                if k.upper().count(str(self.search.text()).upper())>0:
-                    self.list.addItem(QListWidgetItem(k))
-        except:
-            pass
+        self.resize(400,400)
+    def drawEvent(self, event):
+        self.color = 0xAA00AA
+        global W,H
+        for dx in range(0,W):
+            for dy in range(0,H):
+                self.color =0x666666
+                m = self.board.getMine(dx,dy)
+                if m.isMine(): self.color = 0xAAAA00
+                if m.isFlagged(): self.color = 0xAA00AA
+                if m.isDoubt(): self.color = 0x00AAAA                    
+                if dx==self.X and dy==self.Y: self.color = 0xAA0000
                 
-    def __init__(self,name):
-        super(SearchList,self).__init__()
-        self.label = QLabel(name)
-        self.search = QLineEdit()
-        self.search.textChanged.connect(self.listUpdate)
-        self.list = QListWidget()
-        self.layout = QVBoxLayout()
-        self.WholeList=[]
-        self.layout.addWidget(self.label)
-        self.layout.addWidget(self.search)
-        self.layout.addWidget(self.list)
-        self.setLayout(self.layout)
-        self.listUpdate()
+                if m.isShown():
+                    self.drawPushedSquare(5+dx*TileSize,5+dy*TileSize,TileSize)
+                    self.drawNumber(dx,dy)
+                else:
+                    self.drawSquare(5+dx*TileSize,5+dy*TileSize,TileSize)
+    def keyPressEvent(self,event):
+        global W,H
+        key = event.key()
+        if key==Qt.Key_Up:
+            self.Y-=1
+        if key==Qt.Key_Down:
+            self.Y+=1
+        if key==Qt.Key_Left:
+            self.X-=1
+        if key==Qt.Key_Right:
+            self.X+=1        
+        if key==Qt.Key_Z:
+            m = self.board.getMine(self.X,self.Y)
+            if not m.isFlagged() and not m.isDoubt():
+                m.bit=2 # Show
+        if key==Qt.Key_X:
+            m = self.board.getMine(self.X,self.Y)
+            if not m.isShown():
+                m.changeFlag()
+        if key==Qt.Key_C:
+            m = self.board.getMine(self.X,self.Y)
+            if not m.isShown():
+                m.changeDoubt()
+
+            
+                
+        self.X = max(0,self.X)
+        self.X = min(self.X,W)
+        self.Y = max(0,self.Y)
+        self.Y = min(self.Y,H)
+    def showMineCount(self,x,y):
+        global W,H
+        cnt=0
+        for d in dd:
+            dx = d[0]+x
+            dy = d[1]+y
+            if 0<=dx<W and 0<=dy<H:
+                if self.board.getMine(dx,dy).isMine():
+                    cnt+=1
+        return cnt
+    def drawNumber(self,x,y):
+        cnt = self.showMineCount(x,y)
+        if cnt==0:
+            return
+        else:
+            self.color=0xFFFFFF
+            self.font=['Arial',12]
+            self.drawBunsho(9+x*TileSize,16+y*TileSize,str(cnt))
+        
 if __name__ == '__main__':
-    if len(glob.glob(".git"))==0:
-        print("Please execute in the directory has .git directory!")
+    global W,H,M   
+    W,H,M=10,10,20
     app = QApplication(sys.argv)
     mwindow = MainWindow()
     mwindow.show()
