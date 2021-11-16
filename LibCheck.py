@@ -69,6 +69,7 @@ def checkMethod():
         s = raw_input("please input(-1=back):")
         if s=='-1':
             obj=getObject()
+            s=''
 
 
 def main():
