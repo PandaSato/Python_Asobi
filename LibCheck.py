@@ -1,10 +1,10 @@
-from PyQt4.QtGui import *
-from PyQt4.QtCore import *
-from PyQt4 import QtGui,QtCore
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5 import QtGui,QtCore,QtWidgets
 import sys,time,os,random
 
 
-libs=[QtGui,QtCore,sys,os]
+libs=[QtGui,QtCore,QtWidgets,sys,os]
 global lib,obj
 
 def clear():
@@ -25,7 +25,7 @@ def getLibrary():
         clear()
         print("libs="+str(str(libs).split("\'")[1::4]))
         print("please input number from 0~")
-        n = raw_input()
+        n = input()
         try:
             if 0<=int(n)<len(libs):
                 lib=libs[int(n)]
@@ -45,7 +45,7 @@ def getObject():
                 result.append(obj)
         print("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE") ##border line
         for obj in result: print(obj)
-        s = raw_input("please input(-1=back, 1=select): ")
+        s = input("please input(-1=back, 1=select): ")
         if s=='-1':
             lib=getLibrary()
             s=""
@@ -66,7 +66,7 @@ def checkMethod():
             if m.upper().count(s.upper())>0:
                 result.append(m)
         for m in result: print(m)
-        s = raw_input("please input(-1=back):")
+        s = input("please input(-1=back):")
         if s=='-1':
             obj=getObject()
             s=''

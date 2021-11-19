@@ -1,14 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # QTableWidget Example @pythonspot.com
-from PyQt4.QtGui import *
-from PyQt4.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
 import sys, random
 
 #Genesis class is Base class of window. You can define your own windows as its base as Genesis.
 #It has useful functions, and cleaned up messy things.
 
-class Genesis(QWidget):
+class Genesis(QtWidget):
     def __init__(self):
         super(Genesis,self).__init__()
         
@@ -119,7 +119,7 @@ class MainWindow(Genesis):
     def __init__(self):
         super(MainWindow,self).__init__()
         self.setStyleSheet("""
-        QWidget {
+        QtWidget {
             background-color: rgb(0,0,0);
             color: rgb(255,255,255)
             }

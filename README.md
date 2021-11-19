@@ -1,6 +1,7 @@
 <<<Panda Sato's Phython Asobi>>>
 
---compatible with python 2.7.15+, PyQt4
+(Deprecated)--compatible with python 2.7.15+, PyQt4
+--compatible with python 3.7.4, PyQt5
 
 **Completed Projects:
 
