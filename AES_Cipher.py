@@ -1,15 +1,34 @@
+import base64
+import hashlib
+from Crypto import Random
 from Crypto.Cipher import AES
-import hashlib 
 
-hexdigest = hashlib.sha256('a'.encode()).hexdigest()
-digest = hashlib.sha256('a'.encode()).digest()
-digest2 = hashlib.sha256('b'.encode()).digest()
+class AESCipher(object):
 
-#cipher = AES.new(digest, AES.MODE_CBC,digest2)
+    def __init__(self, key): 
+        self.bs = AES.block_size
+        self.key = hashlib.sha256(key.encode()).digest()
 
-test = [2, 3, 5, 7]
-# convert list to bytearray
-byte_array = bytearray(test)
-print(byte_array)
+    def encrypt(self, str):
+        raw = str.encode()
+        raw = self._pad(raw)
+        iv = Random.new().read(AES.block_size)
+        cipher = AES.new(self.key, AES.MODE_CBC, iv)
+        return base64.b64encode(iv + cipher.encrypt(raw))
 
-# Output: bytearray(b'\x02\x03\x05\x07')
+    def decrypt(self, enc):
+        enc = base64.b64decode(enc)
+        iv = enc[:AES.block_size]
+        cipher = AES.new(self.key, AES.MODE_CBC, iv)
+        return self._unpad(cipher.decrypt(enc[AES.block_size:])).decode('utf-8')
+
+    def _pad(self, s):
+        padLength = self.bs - len(s) % self.bs
+        return s + padLength * bytes([padLength])
+
+    @staticmethod
+    def _unpad(s):
+        return s[:-ord(s[len(s)-1:])]
+
+cipher = AESCipher('abc')
+print(cipher.decrypt(cipher.encrypt("나는 천재다")))
