@@ -9,6 +9,7 @@ import sys, random,time
 
 
 ##Print Log, substitute for print debugging
+##In Goorm IDE Qt, You can't use print function, It doesn't show up
 
 logPath = '/workspace/PyQt_Asobi/log'
 def printLog(s):
