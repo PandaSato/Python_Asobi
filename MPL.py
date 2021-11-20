@@ -3,6 +3,7 @@
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
+from PyQt5 import QtGui,QtCore,QtWidgets
 import sys, random,time
 
 #Genesis class is Base class of window. You can define your own windows as its base as Genesis.
@@ -65,3 +66,28 @@ class Genesis(QWidget):
         self.painter.setPen(color.lighter())
         self.painter.drawLine(x + 1, y + size - 1, x + size - 1, y + size - 1)
         self.painter.drawLine(x + size - 1, y + size - 1, x + size - 1, y + 1)
+
+##List that has search bar
+class SearchList(QWidget):
+    def listUpdate(self):
+        self.list.clear()
+        try:
+            for k in self.WholeList:
+                if k.upper().count(str(self.search.text()).upper())>0:
+                    self.list.addItem(QListWidgetItem(k))
+        except:
+            pass
+                
+    def __init__(self,name):
+        super(SearchList,self).__init__()
+        self.label = QLabel(name)
+        self.search = QLineEdit()
+        self.search.textChanged.connect(self.listUpdate)
+        self.list = QListWidget()
+        self.layout = QVBoxLayout()
+        self.WholeList=[]
+        self.layout.addWidget(self.label)
+        self.layout.addWidget(self.search)
+        self.layout.addWidget(self.list)
+        self.setLayout(self.layout)
+        self.listUpdate()

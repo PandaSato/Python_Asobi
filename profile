@@ -6,6 +6,8 @@ if [ "$BASH" ]; then
   fi
 fi
 
+# test
+
 alias ..='cd ..'
 alias python='python3'
 function g() {
@@ -19,9 +21,13 @@ function archieve() {
 	cat /workspace/PyQt_Asobi/index.py > /workspace/PyQt_Asobi/Archieves/$1
 }
 
+function main() {
+    cat $1 > /workspace/PyQt_Asobi/index.py
+}
+
 function update_profile() {
 	touch /workspace/PyQt_Asobi/profile
-	cat ~/.profile > /workspace/PyQt_Asobi/profile
+	cat /workspace/PyQt_Asobi/profile > ~/.profile
 	source ~/.profile
 }
 
