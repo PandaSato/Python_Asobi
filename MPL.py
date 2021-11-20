@@ -6,8 +6,25 @@ from PyQt5.QtWidgets import *
 from PyQt5 import QtGui,QtCore,QtWidgets
 import sys, random,time
 
+
+
+##Print Log, substitute for print debugging
+
+logPath = '/workspace/PyQt_Asobi/log'
+def printLog(s):
+    if len(glob.glob(logPath))==0:
+        os.system('touch '+logPath)
+    f = open(logPath,'a')
+    f.write(s)
+    f.close()
+    
+def clearLog(s):
+    f = open(logPath,'w')
+    f.write("")
+    f.close()
+
 #Genesis class is Base class of window. You can define your own windows as its base as Genesis.
-#It has useful functions, and cleaned up messy things.
+#It has useful Drawing functions, and cleaned up messy things.
 
 class Genesis(QWidget):
     def __init__(self):

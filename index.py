@@ -7,7 +7,9 @@ import sys,os,time,random,glob,pickle,numpy
 libs={"QtGui":QtGui,"QtCore":QtCore, "QtWidgets":QtWidgets, "os":os,"time":time,"random":random,"glob":glob,"pickle":pickle,"numpy":numpy}
 
 global SelectedLibrary
-        
+
+
+
 class MainWindow(QWidget):
     def __init__(self):
         super(MainWindow,self).__init__()
@@ -56,6 +58,7 @@ class MainWindow(QWidget):
             
 
 if __name__ == '__main__':
+    printLog("test2")
     app = QApplication(sys.argv)
     mwindow = MainWindow()
     mwindow.show()
