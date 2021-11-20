@@ -3,12 +3,13 @@
 # QTableWidget Example @pythonspot.com
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
 import sys, random
 
 #Genesis class is Base class of window. You can define your own windows as its base as Genesis.
 #It has useful functions, and cleaned up messy things.
 
-class Genesis(QtWidget):
+class Genesis(QWidget):
     def __init__(self):
         super(Genesis,self).__init__()
         
@@ -36,21 +37,21 @@ class Genesis(QtWidget):
     def drawBunsho(self,x,y,s):
         self.painter.setPen(QColor(self.color))
         self.painter.setFont(QFont(self.font[0],self.font[1]))
-        self.painter.drawText(x,y, QString(unicode(s, 'utf-8')))
+        self.painter.drawText(x,y, s)
     def drawYomigana(self,x,y,s):
         self.painter.setPen(QColor(self.color))
         self.painter.setFont(QFont(self.font[0],self.font[1]))
-        self.painter.drawText(x,y, QString(unicode(s, 'utf-8')))        
+        self.painter.drawText(x,y, s)        
     def drawSquare(self, x, y, size):
         
         color = QColor(self.color)
         self.painter.fillRect(x + 1, y + 1, size - 2, size - 2, color)
 
-        self.painter.setPen(color.light())
+        self.painter.setPen(color.lighter())
         self.painter.drawLine(x, y + size - 1, x, y)
         self.painter.drawLine(x, y, x + size - 1, y)
 
-        self.painter.setPen(color.dark())
+        self.painter.setPen(color.darker())
         self.painter.drawLine(x + 1, y + size - 1, x + size - 1, y + size - 1)
         self.painter.drawLine(x + size - 1, y + size - 1, x + size - 1, y + 1)
     def drawPushedSquare(self, x, y, size):
@@ -58,11 +59,11 @@ class Genesis(QtWidget):
         color = QColor(self.color)
         self.painter.fillRect(x + 1, y + 1, size - 2, size - 2, color)
 
-        self.painter.setPen(color.dark())
+        self.painter.setPen(color.darker())
         self.painter.drawLine(x, y + size - 1, x, y)
         self.painter.drawLine(x, y, x + size - 1, y)
 
-        self.painter.setPen(color.light())
+        self.painter.setPen(color.lighter())
         self.painter.drawLine(x + 1, y + size - 1, x + size - 1, y + size - 1)
         self.painter.drawLine(x + size - 1, y + size - 1, x + size - 1, y + 1)
 ############################Main Application#################
