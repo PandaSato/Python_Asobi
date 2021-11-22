@@ -54,6 +54,12 @@ class MainWindow(QWidget):
                 os.system('touch '+path)
             f = open(path,'w')
             f.write(self.memoEdit.toPlainText())
+        else:
+            name = self.memoLabel.text().split(' ')[2]
+            path = directoryName+'/'+name+'.txt'
+            if len(glob.glob(path))>0:
+                os.system('rm '+path)
+            
         
         
     def getMemo(self):
