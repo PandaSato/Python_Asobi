@@ -10,6 +10,24 @@ global SelectedLibrary
 
 directoryName = "PLF-MEMO"
 
+
+class mySearchList(SearchList):
+    def __init__(self,name):
+        super().__init__(name)
+    def listUpdate(self):
+        self.list.clear()
+        try:
+            for k in self.WholeList:
+                if k.upper().count(str(self.search.text()).upper())>0:
+                    item = QListWidgetItem(k)
+                    self.list.addItem(item)
+                    for s in glob.glob(directoryName+'/*'):
+                        if s.count(k)>0:
+                            item.setBackground(QColor(0xFFDDDD))
+                    
+        except:
+            pass
+
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -74,16 +92,16 @@ class MainWindow(QWidget):
     def initUI(self):
         self.resize(800,400)
         self.layout = QHBoxLayout()
-        self.list1=SearchList("Libraries")
+        self.list1=mySearchList("Libraries")
         l = list(libs.keys())
         l.sort()
         for lib in l:
             self.list1.WholeList.append(lib)
         self.list1.listUpdate()
         self.list1.list.currentItemChanged.connect(self.selectLibrary)
-        self.list2=SearchList("Classes")
+        self.list2=mySearchList("Classes")
         self.list2.list.currentItemChanged.connect(self.selectObject)        
-        self.list3=SearchList("Components")
+        self.list3=mySearchList("Components")
         self.list3.list.currentItemChanged.connect(self.getMemo)
         self.layout.addWidget(self.list1)
         self.layout.addWidget(self.list2)
