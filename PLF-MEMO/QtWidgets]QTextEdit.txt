@@ -1,0 +1,3 @@
+toPlainText() -> get all text
+setPlainText() -> set all text
+
