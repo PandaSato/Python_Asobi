@@ -115,7 +115,7 @@ class MainWindow(QWidget):
         self.layout.addWidget(self.list3)
 
         self.mainLayout = QVBoxLayout()
-        self.memoEdit = QTextEdit()
+        self.memoEdit = PythonEditor()
         self.memoLabel = QLabel("MEMO")
         self.memoEdit.textChanged.connect(self.editMemo)
         self.mainLayout.addLayout(self.layout)
