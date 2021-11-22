@@ -22,8 +22,9 @@ class mySearchList(SearchList):
                     item = QListWidgetItem(k)
                     self.list.addItem(item)
                     for s in glob.glob(directoryName+'/*'):
-                        if s.count(k)>0:
-                            item.setBackground(QColor(0xFFDDDD))
+                        for name in s.split('/')[1].split('.')[0].split(']'):
+                            if name==k:
+                                item.setBackground(QColor(0xFFDDDD))
                     
         except:
             pass
@@ -53,6 +54,12 @@ class MainWindow(QWidget):
                 os.system('touch '+path)
             f = open(path,'w')
             f.write(self.memoEdit.toPlainText())
+        else:
+            name = self.memoLabel.text().split(' ')[2]
+            path = directoryName+'/'+name+'.txt'
+            if len(glob.glob(path))>0:
+                os.system('rm '+path)
+            
         
         
     def getMemo(self):

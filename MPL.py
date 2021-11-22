@@ -5,6 +5,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5 import QtGui,QtCore,QtWidgets
 import sys, random,time, glob
+from pythonSyntaxHighlighter import PythonHighlighter
 
 
 
@@ -109,3 +110,9 @@ class SearchList(QWidget):
         self.layout.addWidget(self.list)
         self.setLayout(self.layout)
         self.listUpdate()
+        
+## Show Python Editor
+class PythonEditor(QTextEdit):
+    def __init__(self):
+        super().__init__()
+        self.highlight=PythonHighlighter(self.document())
