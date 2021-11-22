@@ -4,7 +4,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5 import QtGui,QtCore,QtWidgets
-import sys, random,time
+import sys, random,time, glob
 
 
 
@@ -16,7 +16,7 @@ def printLog(s):
     if len(glob.glob(logPath))==0:
         os.system('touch '+logPath)
     f = open(logPath,'a')
-    f.write(s)
+    f.write(s+'\n')
     f.close()
     
 def clearLog(s):

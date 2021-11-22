@@ -30,7 +30,7 @@ class AESCipher(object):
             enc = base64.b64decode(enc)
             iv = enc[:AES.block_size]
             cipher = AES.new(self.key, AES.MODE_CBC, iv)
-            return self._unpad(cipher.decrypt(enc[AES.block_size:])).decode('utf-8')
+            return self._unpad(cipher.decrypt(enc[AES.block_size:])).decode()
         except:
             return 'DecodeError'
     
@@ -55,6 +55,6 @@ class AESCipher(object):
 
 print(getHashCode("abc"))
 cipher = AESCipher('abc')
-print(cipher.decrypt(cipher.encrypt("나는 천재다")))
+print(cipher.decrypt(cipher.encrypt("안녕")))
 cipher.write('test','안녕\n만나서반가워')
 cipher.readlines('test')
