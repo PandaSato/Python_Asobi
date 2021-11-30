@@ -32,6 +32,8 @@ def makePrimeList(plist, sp, cnt):
             new_plist.append(sp)
             cnt-=1
     return new_plist
+
+
         
 if __name__=='__main__':
     
@@ -51,3 +53,4 @@ if __name__=='__main__':
         os.system('touch '+path)
         file = open(path,'wb')
         pickle.dump(list,file)
+        print("made prime list ~"+str(name))
