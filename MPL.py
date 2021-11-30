@@ -24,6 +24,24 @@ def clearLog(s):
     f = open(logPath,'w')
     f.write("")
     f.close()
+    
+
+##safeCommand is substitute of os.system function. if the command doesn't ends, safecommand kills the process after the timeout.
+## use like : if safeCommand(yourcommand):
+##                ## do your things
+
+
+def safeCommand(cmd,timeout):
+    from subprocess import Popen
+    proc = Popen(cmd,shell=True)
+    startTime = time.time()
+    while True:
+        if not (proc.poll() is None):
+            return True ##means success
+        if time.time()-startTime>timeout:
+            proc.kill()
+            return False ## means killed by timeout
+        
 
 #Genesis class is Base class of window. You can define your own windows as its base as Genesis.
 #It has useful Drawing functions, and cleaned up messy things.
