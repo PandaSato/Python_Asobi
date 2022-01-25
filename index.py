@@ -33,7 +33,7 @@ class MainWindow(QWidget):
         self.initUI()
     def initUI(self):
         self.resize(800,400)
-        self.setLayout(XVLayout(XButton("New Project",dummy)))
+        self.setLayout(XVLayout(XButton("New Project",dummy)),XButton("Hello World",dummy)))
             
 
 if __name__ == '__main__':
