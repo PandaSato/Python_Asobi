@@ -140,19 +140,20 @@ def XButton(buttonName, function):
     return button
 
 def XVLayout(*components):
-    return _XLayout('V',components)
+    return _XBoxLayout('V',components)
 
 def XHLayout(*components):
-    return _XLayout('H',components)
+    return _XBoxLayout('H',components)
     
 
-def _XLayout(type, components):
+def _XBoxLayout(type, components):
     if type=='V':
         layout = QVBoxLayout()
     else:
         layout = QHBoxLayout()
     for component in components:
         try:
+            ##if component is integer, it is considered as a stretch factor.
             layout.addStretch(component)
             continue
         except:
@@ -162,6 +163,17 @@ def _XLayout(type, components):
         except:
             layout.addLayout(component)
     return layout   
+
+
+##Horizontal Table with header labels
+def XTableView(*headerLabels):
+    table = QTableWidget()
+    table.setColumnCount(len(headerLabels))
+    table.setHorizontalHeaderLabels(headerLabels)
+    table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch) 
+    #table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents) # Other header resizing option
+    #table.horizontalHeader().setSectionResizeMode(len(headerLabels)-1, QHeaderView.Stretch) # Stretch Last header
+    return table
 ###Excellent GUI####
 
 

@@ -1,14 +1,7 @@
 from MPL import *
 
 
-def XTableView(*headerLabels):
-    table = QTableWidget()
-    table.setColumnCount(len(headerLabels))
-    table.setHorizontalHeaderLabels(headerLabels)
-    table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch) 
-    #table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents) 
-    #table.horizontalHeader().setSectionResizeMode(len(headerLabels)-1, QHeaderView.Stretch) # Stretch Last header
-    return table
+
 ##dummy function
 def dummy():
     print("dummy")
