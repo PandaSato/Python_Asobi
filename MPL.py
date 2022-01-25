@@ -104,6 +104,9 @@ class Genesis(QWidget):
         self.painter.drawLine(x + 1, y + size - 1, x + size - 1, y + size - 1)
         self.painter.drawLine(x + size - 1, y + size - 1, x + size - 1, y + 1)
 
+        
+
+###Easy, Excellent GUI###
 ##List that has search bar
 class SearchList(QWidget):
     def listUpdate(self):
@@ -128,7 +131,41 @@ class SearchList(QWidget):
         self.layout.addWidget(self.list)
         self.setLayout(self.layout)
         self.listUpdate()
-        
+
+
+
+def XButton(buttonName, function):
+    button = QPushButton(buttonName)
+    button.clicked.connect(function)
+    return button
+
+def XVLayout(*components):
+    return _XLayout('V',components)
+
+def XHLayout(*components):
+    return _XLayout('H',components)
+    
+
+def _XLayout(type, components):
+    if type=='V':
+        layout = QVBoxLayout()
+    else:
+        layout = QHBoxLayout()
+    for component in components:
+        try:
+            layout.addStretch(component)
+            continue
+        except:
+            pass
+        try:
+            layout.addWidget(component)
+        except:
+            layout.addLayout(component)
+    return layout   
+###Excellent GUI####
+
+
+
 ## Show Python Editor
 class PythonEditor(QTextEdit):
     def __init__(self):
